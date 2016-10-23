@@ -12,4 +12,4 @@ var List = React.createClass({
   }
 });
 
-module.exports = List
+module.exports = List;
