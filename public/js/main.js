@@ -20806,42 +20806,80 @@ var List = require('./List.jsx');
 var ListManager = React.createClass({
   displayName: 'ListManager',
 
+  // Called once in the Component life cycle - initializer
   getInitialState: function () {
     return { items: [], newItemText: '' };
   },
+  // onChange is called with every keystroke to store the most rencent data entered
   onChange: function (e) {
-    // console.log(e)
+    // console.log(e) How does proxy work and how is information being passed along?(state and props)
+    // Value is what the user sees in the input box which is then directed to newItemText so it updates accordingly
     this.setState({ newItemText: e.target.value });
   },
   handleSubmit: function (e) {
+    // Stop button from getting clicks since we are using form onSubmit
     e.preventDefault();
 
+    // Grab current list of items
     var currentItems = this.state.items;
 
+    // Add new item to the list
     currentItems.push(this.state.newItemText);
 
-    this.setState({ item: currentItems, newItemText: '' });
+    // Update the main item list with the new list and the newItemText
+    this.setState({ items: currentItems, newItemText: '' });
   },
   render: function () {
+    // javascript object
+    var divStyle = {
+      marginTop: 10
+    };
+
+    var headingStyle = {};
+
+    if (this.props.headingColor) {
+      headingStyle.background = this.props.headingColor;
+    }
+
     return React.createElement(
       'div',
-      null,
+      { style: divStyle, className: 'col-sm-4' },
       React.createElement(
-        'h3',
-        null,
-        this.props.title
-      ),
-      React.createElement(
-        'form',
-        { onSubmit: this.handleSubmit },
-        React.createElement('input', { onChange: this.onChange, value: this.state.newItemText }),
+        'div',
+        { className: 'panel panel-info' },
         React.createElement(
-          'button',
-          null,
-          'Add'
-        )
-      ),
-      React.createElement(List, { items: this.state.items })
+          'div',
+          { style: headingStyle, className: 'panel-heading' },
+          React.createElement(
+            'h3',
+            { className: 'panel-title' },
+            this.props.title
+          )
+        ),
+        React.createElement(
+          'div',
+          { className: 'row panel-body' },
+          React.createElement(
+            'form',
+            { onSubmit: this.handleSubmit },
+            React.createElement(
+              'div',
+              { className: 'col-sm-9' },
+              React.createElement('input', { className: 'form-control', onChange: this.onChange, value: this.state.newItemText })
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-sm-2' },
+              React.createElement(
+                'button',
+                { className: 'btn btn-info' },
+                'Add'
+              )
+            )
+          )
+        ),
+        React.createElement(List, { items: this.state.items })
+      )
     );
   }
 });
@@ -20854,5 +20892,7 @@ var ReactDOM = require('react-dom');
 var ListManager = require('./components/ListManager.jsx');
 
 ReactDOM.render(React.createElement(ListManager, { title: 'Ingredients' }), document.getElementById('ingredients'));
+ReactDOM.render(React.createElement(ListManager, { title: 'Todo' }), document.getElementById('todo'));
+ReactDOM.render(React.createElement(ListManager, { title: 'Christmas', headingColor: '#f45e5d' }), document.getElementById('christmas'));
 
 },{"./components/ListManager.jsx":174,"react":171,"react-dom":28}]},{},[175]);
